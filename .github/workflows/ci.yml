@@ -1,0 +1,56 @@
+# === NOM DU WORKFLOW ===
+# Ce nom apparait dans l'onglet "Actions" de GitHub
+name: CI Next.js
+
+# === DECLENCHEURS (quand ce workflow se lance) ===
+on:
+  push:
+    branches: [master]        # Se lance quand on push sur main
+  pull_request:
+    branches: [master]        # Se lance quand une PR cible main
+
+# === JOBS (groupes de tâches) ===
+jobs:
+  # Nom du job (peut être n'importe quoi)
+  build:
+    # Système d'exploitation de la machine virtuelle
+    # 'ubuntu-latest' = dernière version de Linux Ubuntu
+    runs-on: ubuntu-latest
+
+    # === ÉTAPES DU JOB (exécutées dans l'ordre) ===
+    steps:
+      # ETAPE 1 : Télécharger le code source depuis GitHub
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ETAPE 2 : Installer Node.js sur la VM
+      # 'cache: npm' met en cache les dépendances pour accélérer les builds suivants
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # ETAPE 3 : Installer les dépendances du projet
+      # 'npm ci' utilise exactement les versions du package-lock.json et est plus rapide
+      - name: Install dependencies
+        run: npm ci
+
+      # ETAPE 4 : Linting (vérification de qualité du code)
+      # Si une erreur est trouvée, cette étape échoue et les étapes suivantes sont annulées
+      - name: Linting
+        run: npm run lint
+
+      # ETAPE 5 (optionnelle) : Tests unitaires
+      # Décommentez si vous avez configuré Jest / Vitest
+      # - name: Run Tests
+      #   run: npm test
+
+      # ETAPE 6 : Build de vérification
+      # Tente de construire le projet Next.js pour vérifier qu'il n'y a pas d'erreurs de compilation
+      - name: Build project
+        run: npm run build
+        env:
+          # Variables nécessaires uniquement pour que le build passe en CI
+          DATABASE_URL: "postgresql://user:pass@localhost:5432/db"
+          NEXTAUTH_SECRET: "YY8VCeR6PLKtK73xe4Z7gwH8qtMFC4+gmuWS8EyUAZM="
