@@ -52,5 +52,5 @@ jobs:
         run: npm run build
         env:
           # Variables nécessaires uniquement pour que le build passe en CI
-          DATABASE_URL: "postgresql://user:pass@localhost:5432/db"
+          DATABASE_URL: "postgresql://neondb_owner:npg_s4WqKN1nEwFM@ep-floral-meadow-airj5646-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
           NEXTAUTH_SECRET: "YY8VCeR6PLKtK73xe4Z7gwH8qtMFC4+gmuWS8EyUAZM="
