@@ -1,7 +1,7 @@
 // prisma/seed.js
 // Remplissage initial : categories + produits
 
-import { PrismaClient } from "@prisma/client"; // <-- pas d'espaces ici !
+import { PrismaClient } from "@prisma/client"; 
 
 const prisma = new PrismaClient();
 
